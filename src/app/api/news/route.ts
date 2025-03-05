@@ -2,7 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 // Using the API key server-side to avoid exposing it in client-side code
 // In production, store this in environment variables
-const API_KEY = "8722d33fe4784c12b20fd5c7129a7b5e";
+const API_KEY = process.env.NEWS_API_KEY;
+if (!API_KEY) {
+    throw new Error("Missing NEWS_API_KEY environment variable");
+}
 const BASE_URL = "https://newsapi.org/v2";
 
 export async function GET(request: NextRequest) {
@@ -22,7 +25,7 @@ export async function GET(request: NextRequest) {
         });
 
         // Add API key (server-side)
-        newsApiUrl.searchParams.append("apiKey", API_KEY);
+        newsApiUrl.searchParams.append("apiKey", API_KEY as string);
 
         console.log(`Proxying request to: ${newsApiUrl.toString()}`);
 
